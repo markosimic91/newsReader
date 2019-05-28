@@ -2,6 +2,7 @@ package com.example.newsreader;
 
 import android.app.SearchManager;
 import android.content.Context;
+import android.content.Intent;
 import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -91,6 +92,8 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
                     recyclerView.setAdapter(adapter);
                     adapter.notifyDataSetChanged();
 
+                    initListener();
+
                     topHeadLine.setVisibility(View.VISIBLE);
                     swipeRefreshLayout.setRefreshing(false);
 
@@ -173,5 +176,26 @@ public class MainActivity extends AppCompatActivity implements SwipeRefreshLayou
         });
     }
     //endregion
+
+    private void initListener(){
+        adapter.setOnItemClickListener(new NewsAdapter.OnItemClickListener() {
+            @Override
+            public void onItemClick(View view, int position) {
+                Intent intent = new Intent(MainActivity.this ,NewsDetailActivity.class);
+
+                Article article = articles.get(position);
+                intent.putExtra("url",article.getUrl());
+                intent.putExtra("title",article.getTitle());
+                intent.putExtra("img",article.getUrlToImg());
+                intent.putExtra("date",article.getPublishedAt());
+                intent.putExtra("source",article.getSource().getName());
+                intent.putExtra("author",article.getAuthor());
+
+
+                startActivity(intent);
+            }
+        });
+
+    }
 
 }
