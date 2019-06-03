@@ -137,6 +137,36 @@ public class NewsDetailActivity extends AppCompatActivity implements AppBarLayou
             titleAppbar.setVisibility(View.GONE);
             isHideToolbarView = !isHideToolbarView;
         }
+    }
 
+    @Override
+    public boolean onCreateOptionsMenu(Menu menu) {
+        getMenuInflater().inflate(R.menu.menu_news,menu);
+        return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+
+        int id = item.getItemId();
+        if (id == R.id.view_web){
+            Intent intent = new Intent(Intent.ACTION_VIEW);
+            intent.setData(Uri.parse(mUrl));
+            startActivity(intent);
+            return true;
+        }else if(id == R.id.share){
+            try{
+                Intent i = new Intent(Intent.ACTION_SEND);
+                i.setType("text/plan");
+                i.putExtra(Intent.EXTRA_SUBJECT,mSource);
+                String body = mTitle + "\n" + mUrl + "\n" + "Share from NewsReader" + "\n";
+                i.putExtra(Intent.EXTRA_TEXT,body);
+                startActivity(Intent.createChooser(i,"Share wit :"));
+            }catch (Exception e){
+                Toast.makeText(this, "Hmm...Sorry, \nCannot be share", Toast.LENGTH_SHORT).show();
+            }
+        }
+
+        return super.onOptionsItemSelected(item);
     }
 }
